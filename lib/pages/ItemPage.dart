@@ -9,6 +9,8 @@ import '../widgets/ItemBottomNavBar.dart';
 
 class ItemPage extends StatelessWidget{
 
+
+
   List<Color> Clrs=[
     Colors.red,
     Colors.green,
@@ -16,6 +18,8 @@ class ItemPage extends StatelessWidget{
     Colors.indigo,
     Colors.orange,
   ];
+
+  ItemPage({super.key});
  @override
  Widget build (BuildContext context){
   return Scaffold(

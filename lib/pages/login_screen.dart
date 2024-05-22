@@ -10,11 +10,14 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  Future signIN() async {
-    Navigator.of(context).pushReplacementNamed('homePage');
+  Future<void> signIN() async {
+    if (_formKey.currentState!.validate()) {
+      Navigator.of(context).pushReplacementNamed('homePage');
+    }
   }
 
   void openSignupScreen() {
@@ -28,6 +31,27 @@ class _LoginScreenState extends State<LoginScreen> {
     _passwordController.dispose();
   }
 
+  String? _validateEmail(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter your email';
+    }
+    final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
+    if (!emailRegex.hasMatch(value)) {
+      return 'Please enter a valid email address';
+    }
+    return null;
+  }
+
+  String? _validatePassword(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter your password';
+    }
+    if (value.length < 6) {
+      return 'Password must be at least 6 characters long';
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,124 +59,127 @@ class _LoginScreenState extends State<LoginScreen> {
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                //image
-                // Image.asset(
-                //   'images/koala.png',
-                //   height: 150,
-                //  ),
-                //  SizedBox(height: 20,),
-                //title
-                Text(
-                  'SIGN IN',
-                  style: GoogleFonts.robotoCondensed(
-                      fontSize: 40, fontWeight: FontWeight.bold),
-                ),
-                Text(
-                  'welcome back! Nice to see you again',
-                  style: GoogleFonts.robotoCondensed(
-                    fontSize: 20,
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // Image.asset(
+                  //   'images/koala.png',
+                  //   height: 150,
+                  // ),
+                  // SizedBox(height: 20,),
+                  Text(
+                    'SIGN IN',
+                    style: GoogleFonts.robotoCondensed(
+                        fontSize: 40, fontWeight: FontWeight.bold),
                   ),
-                ),
-
-                SizedBox(
-                  height: 20,
-                ),
-
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25),
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12)),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: TextField(
-                        controller: _emailController,
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: 'Email',
-                        ),
-                      ),
+                  Text(
+                    'Welcome back! Nice to see you again',
+                    style: GoogleFonts.robotoCondensed(
+                      fontSize: 20,
                     ),
                   ),
-                ),
 
-                SizedBox(
-                  height: 20,
-                ),
-
-                //password
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25),
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12)),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: TextField(
-                        controller: _passwordController,
-                        obscureText: true,
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: 'password',
-                        ),
-                      ),
-                    ),
+                  SizedBox(
+                    height: 20,
                   ),
-                ),
 
-                SizedBox(
-                  height: 15,
-                ),
-
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 25),
-                  child: GestureDetector(
-                    onTap: signIN,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25),
                     child: Container(
-                      padding: EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                          color: Colors.blue,
+                          color: Colors.white,
                           borderRadius: BorderRadius.circular(12)),
-                      child: Center(
-                        child: Text(
-                          'sign in',
-                          style: GoogleFonts.robotoCondensed(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: TextFormField(
+                          controller: _emailController,
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: 'Email',
+                          ),
+                          validator: _validateEmail,
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  SizedBox(
+                    height: 20,
+                  ),
+
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25),
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12)),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: TextFormField(
+                          controller: _passwordController,
+                          obscureText: true,
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: 'Password',
+                          ),
+                          validator: _validatePassword,
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  SizedBox(
+                    height: 15,
+                  ),
+
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 25),
+                    child: GestureDetector(
+                      onTap: signIN,
+                      child: Container(
+                        padding: EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                            color: Colors.blue,
+                            borderRadius: BorderRadius.circular(12)),
+                        child: Center(
+                          child: Text(
+                            'Sign In',
+                            style: GoogleFonts.robotoCondensed(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
                           ),
                         ),
                       ),
                     ),
                   ),
-                ),
 
-                SizedBox(
-                  height: 25,
-                ),
+                  SizedBox(
+                    height: 25,
+                  ),
 
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Not yet a member? ',
-                      style: GoogleFonts.robotoCondensed(fontSize: 18),
-                    ),
-                    GestureDetector(
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Not yet a member? ',
+                        style: GoogleFonts.robotoCondensed(fontSize: 18),
+                      ),
+                      GestureDetector(
                         onTap: openSignupScreen,
                         child: Text(
-                          'sign up now',
+                          'Sign up now',
                           style: GoogleFonts.robotoCondensed(
                               fontSize: 18, fontWeight: FontWeight.bold),
-                        ))
-                  ],
-                ),
-              ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),

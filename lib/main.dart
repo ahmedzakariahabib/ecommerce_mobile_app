@@ -20,6 +20,8 @@ class MyApp extends StatelessWidget {
      '/': (context) => LoginScreen(),
        'homePage': (context) => HomePage(),
        'signupScreen': (context) => SignupScreen(),
+          'loginScreen': (context) => LoginScreen(),
+
       'cartPage': (context) => CartPage(),
       'itemPage': (context) => ItemPage(),
         },
